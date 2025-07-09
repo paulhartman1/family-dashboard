@@ -17,6 +17,7 @@ const [user, setUser] = useState<User | null>(null)
         setUser(data.user)
         router.push('/dashboard')
       } else {
+        console.error(error, user)
         router.push('/login')
       }
     }

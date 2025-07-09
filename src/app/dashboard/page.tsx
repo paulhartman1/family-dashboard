@@ -16,6 +16,7 @@ const [user, setUser] = useState<User | null>(null)
       if (data?.user) {
         setUser(data.user)
       } else {
+        console.error(error)
         router.push('/login')
       }
     }
