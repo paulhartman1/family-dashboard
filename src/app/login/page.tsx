@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/utils/supabaseClient'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -20,6 +21,14 @@ export default function LoginPage() {
   }
 
   return (
+    <>
+     <Image
+      src="https://picsum.photos/350/350"
+      width={350}
+      height={350}
+      style={imageStyle}
+      alt="Picture of the author"
+    />
     <div className="max-w-md mx-auto p-8">
       <h1 className="text-2xl mb-4">Log In</h1>
       {error && <p className="text-red-500">{error}</p>}
@@ -44,5 +53,15 @@ export default function LoginPage() {
         Sign Up
       </button>
     </div>
+    </>
   )
 }
+
+const imageStyle = {
+  borderRadius: '50%',
+  border: '1px solid #fff',
+  width: '100px',
+  height: 'auto',
+}
+
+
