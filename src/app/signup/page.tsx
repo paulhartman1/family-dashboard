@@ -40,6 +40,9 @@ export default function SignupPage() {
       <button className="bg-purple-600 text-white px-4 py-2 rounded" onClick={handleSignup}>
         Create Account
       </button>
+      <button className="bg-purple-600 text-white px-4 py-2 mx-4 rounded" onClick={() => router.push('/login')}>
+        Log In
+      </button>
     </div>
   )
 }
