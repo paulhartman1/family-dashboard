@@ -12,7 +12,8 @@
     "@auth/supabase-adapter": "^1.10.0",
     "@auth/unstorage-adapter": "^2.0.0",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "@supabase/supabase-js": "^2.50.3",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.56.0",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.5",
     "react": "^19.0.0",
@@ -21,6 +22,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@snaplet/copycat": "^6.0.0",
+    "@snaplet/seed": "^0.98.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",

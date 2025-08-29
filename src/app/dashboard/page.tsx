@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/utils/supabaseClient'
+import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 import LogoutButton from '../components/LogoutButton'
@@ -11,6 +11,7 @@ const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
 
   useEffect(() => {
+    const supabase = createClient();
     const getUser = async () => {
       const { data, error } = await supabase.auth.getUser()
       if (data?.user) {
