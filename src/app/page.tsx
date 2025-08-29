@@ -2,14 +2,14 @@
 
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/utils/supabaseClient'
+import { createClient } from '@/utils/supabase/client' // Use the same client as dashboard
 import { useRouter } from 'next/navigation'
 import type { User } from '@supabase/supabase-js'
 
 export default function Home() {
 const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
-
+  const supabase = createClient()
  useEffect(() => {
     const getUser = async () => {
       const { data, error } = await supabase.auth.getUser()
@@ -25,6 +25,6 @@ const [user, setUser] = useState<User | null>(null)
   }, [])
   
   return (
-     <p>Redirecting...</p>
+     <p>We&apos;re getting things setup. Done soon...</p>
   );
 }
