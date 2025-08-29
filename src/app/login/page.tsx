@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { createClient } from '@/utils/supabase/client' // Use the same client as dashboard
 
 export default function LoginPage() {
@@ -74,13 +73,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Image
-        src="https://picsum.photos/350/350"
-        width={350}
-        height={350}
-        style={imageStyle}
-        alt="Picture of the author"
-      />
+    
       <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">
         <h1 className="text-2xl mb-4">Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -128,9 +121,3 @@ export default function LoginPage() {
   )
 }
 
-const imageStyle = {
-  borderRadius: '50%',
-  border: '1px solid #fff',
-  width: '100px',
-  height: 'auto',
-}
