@@ -1,0 +1,3 @@
+[auth]
+site_url = "http://localhost:3000"
+redirect_urls = ["http://localhost:3000/dashboard"]

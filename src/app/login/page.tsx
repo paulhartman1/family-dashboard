@@ -1,58 +1,129 @@
 'use client'
 
-import { useState } from 'react'
-import { supabase } from '@/utils/supabaseClient'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { createClient } from '@/utils/supabase/client' // Use the same client as dashboard
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const supabase = createClient() // Create client instance
 
-  const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getSession()
+      if (data.session) {
+        router.replace('/dashboard')
+      }
+    }
+    checkUser()
+  }, [router, supabase])
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    console.log('Attempting login...')
+
+    const { data, error } = await supabase.auth.signInWithPassword({ 
+      email, 
+      password 
+    })
+
+    if (error) {
+      console.log('Login error:', error)
+      setError(error.message)
+      setLoading(false)
+      return
+    }
+
+    console.log('Login successful:', data)
+    
+    // Wait a bit for the session to be set, then redirect
+    if (data.session) {
+      console.log('Session found, redirecting...')
+      // Force a page refresh to ensure middleware picks up the new session
+      window.location.href = '/dashboard'
+    }
+    
+    setLoading(false)
+  }
+
+  const handleSignUp = async () => {
+    setError(null)
+    
+    const { error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`
+      }
+    })
+
     if (error) {
       setError(error.message)
     } else {
-      router.push('/dashboard')
+      setError('Check your email for verification link!')
     }
   }
 
   return (
     <>
-     <Image
-      src="https://picsum.photos/350/350"
-      width={350}
-      height={350}
-      style={imageStyle}
-      alt="Picture of the author"
-    />
-    <div className="max-w-md mx-auto p-8">
-      <h1 className="text-2xl mb-4">Log In</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <input
-        className="w-full p-2 border mb-2"
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+      <Image
+        src="https://picsum.photos/350/350"
+        width={350}
+        height={350}
+        style={imageStyle}
+        alt="Picture of the author"
       />
-      <input
-        className="w-full p-2 border mb-4"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="bg-purple-600 text-white px-4 py-2 rounded" onClick={handleLogin}>
-        Log In
-      </button>
-         <button className="bg-purple-600 text-white px-4 mx-4 py-2 rounded" onClick={() => router.push('/signup')}>
-        Sign Up
-      </button>
-    </div>
+      <div className="max-w-md mx-auto mt-20 p-6 border rounded shadow">
+        <h1 className="text-2xl mb-4">Login</h1>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block mb-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          {error && <p className="text-red-600">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
+          
+          <button
+            type="button"
+            onClick={handleSignUp}
+            className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700"
+          >
+            Sign Up
+          </button>
+        </form>
+      </div>
     </>
   )
 }
@@ -63,5 +134,3 @@ const imageStyle = {
   width: '100px',
   height: 'auto',
 }
-
-
