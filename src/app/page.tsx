@@ -25,6 +25,6 @@ const [user, setUser] = useState<User | null>(null)
   }, [])
   
   return (
-     <p>We're getting things setup. Done soon...</p>
+     <p>We&apos;re getting things setup. Done soon...</p>
   );
 }
